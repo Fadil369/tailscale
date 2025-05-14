@@ -14,37 +14,45 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  build:
+    name: Build Jekyll Site
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source
+      - name: 📦 Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Setup Ruby
+      - name: 🧱 Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1'
 
-      - name: Install Jekyll & Bundler
+      - name: 🔨 Install Jekyll & Bundler
         run: |
           gem install bundler jekyll
 
-      - name: Build Jekyll site
+      - name: 🛠 Build Site
         run: |
           cd docs
           jekyll build -d ../_site
 
-      - name: Upload Pages artifact
+      - name: 📤 Upload GitHub Pages Artifact
         uses: actions/upload-pages-artifact@v2
         with:
           path: _site
 
-      - name: Deploy to GitHub Pages
+  deploy:
+    name: 🚀 Deploy GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: 🔧 Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v2
