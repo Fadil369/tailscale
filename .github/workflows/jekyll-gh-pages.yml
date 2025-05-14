@@ -1,28 +1,18 @@
-name: Deploy GitHub Pages (Jekyll)
+# .github/workflows/jekyll-gh-pages.yml
+
+name: Build and Deploy Jekyll Site
 
 on:
   push:
-    branches: [main]
-    paths:
-      - 'docs/**'
-      - '.github/workflows/jekyll-gh-pages.yml'
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
+    branches:
+      - main
 
 jobs:
   build:
-    name: Build & Upload Jekyll Site
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Ruby
@@ -30,29 +20,33 @@ jobs:
         with:
           ruby-version: '3.1'
 
-      - name: Install Jekyll
+      - name: Install dependencies
         run: |
-          gem install bundler jekyll
+          gem install bundler
+          bundle install
 
-      - name: Build Jekyll Site
-        run: |
-          cd docs
-          jekyll build -d ../_site
+      - name: Build Jekyll site
+        run: bundle exec jekyll build
 
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v2
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          path: _site
+          name: site
+          path: _site/
 
   deploy:
-    name: Deploy to GitHub Pages
     needs: build
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
 
     steps:
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@v2
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: _site/
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
