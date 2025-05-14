@@ -1,0 +1,11 @@
+title: BrainSAIT Tailscale Control
+description: Secure GitOps for Tailscale ACLs
+theme: jekyll-theme-hacker
+markdown: kramdown
+show_downloads: false
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+      css: /assets/css/custom.css
