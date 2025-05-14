@@ -1,0 +1,4 @@
+source "https://rubygems.org"
+
+gem "github-pages", group: :jekyll_plugins
+# Removed explicit Jekyll version as github-pages will manage the correct version
