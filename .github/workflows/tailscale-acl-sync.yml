@@ -1,0 +1,23 @@
+name: Sync Tailscale ACLs
+
+on:
+  push:
+    paths:
+      - "tailscale/acls.json"
+    branches:
+      - main
+
+jobs:
+  sync-acl:
+    runs-on: ubuntu-latest
+    name: Apply ACL to Tailscale
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Sync Tailscale ACLs
+        uses: tailscale/gitops-acl-action@v1.3.1
+        with:
+          tailscale-api-key: ${{ secrets.TAILSCALE_API_KEY }}
+          config-path: tailscale/acls.json
