@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "tagOwners": {
+    "tag:macbook": ["user:fadil369@github"],
+    "tag:win10": ["user:fadil369@github"]
+  },
+  "hosts": {
+    "brainsait-mac": "100.90.177.43",
+    "brainsait369": "100.82.120.30"
+  },
+  "acls": [
+    {
+      "action": "accept",
+      "src": [
+        "user:fadil369@github",
+        "tag:macbook",
+        "tag:win10"
+      ],
+      "dst": [
+        "tag:macbook:*",
+        "tag:win10:*",
+        "100.90.177.43:*",
+        "100.82.120.30:*"
+      ]
+    }
+  ],
+  "ssh": [
+    {
+      "action": "accept",
+      "src": ["user:fadil369@github"],
+      "dst": ["tag:macbook", "tag:win10"]
+    }
+  ],
+  "autoApprovers": {
+    "routes": {},
+    "exitNode": {
+      "tag:macbook": ["user:fadil369@github"],
+      "tag:win10": ["user:fadil369@github"]
+    }
+  },
+  "tests": [
+    {
+      "src": "user:fadil369@github",
+      "dst": "tag:macbook",
+      "accept": true
+    },
+    {
+      "src": "user:fadil369@github",
+      "dst": "tag:win10",
+      "accept": true
+    }
+  ]
+}
