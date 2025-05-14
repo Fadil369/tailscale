@@ -18,34 +18,34 @@ concurrency:
 
 jobs:
   build:
-    name: Build Jekyll Site
+    name: Build & Upload Jekyll Site
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📦 Checkout Repository
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: 🧱 Setup Ruby
+      - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1'
 
-      - name: 🔨 Install Jekyll & Bundler
+      - name: Install Jekyll
         run: |
           gem install bundler jekyll
 
-      - name: 🛠 Build Site
+      - name: Build Jekyll Site
         run: |
           cd docs
           jekyll build -d ../_site
 
-      - name: 📤 Upload GitHub Pages Artifact
+      - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v2
         with:
           path: _site
 
   deploy:
-    name: 🚀 Deploy GitHub Pages
+    name: Deploy to GitHub Pages
     needs: build
     runs-on: ubuntu-latest
     environment:
@@ -53,6 +53,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: 🔧 Deploy to GitHub Pages
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v2
